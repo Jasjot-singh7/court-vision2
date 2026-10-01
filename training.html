@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Court Vision — Training Mode</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="site-title">Court Vision</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="training.html" class="active">Training Mode</a>
+      <a href="challenge.html">Challenge Mode</a>
+      <a href="progress.html">Progress</a>
+    </nav>
+  </header>
+
+  <main class="container page-content">
+    <h1 class="page-title">Training Mode</h1>
+    <p class="subtitle">Watch a scenario, then choose what happens next.</p>
+
+    <h2 id="scenarioCounter" class="section-title">Scenario 1 of 10</h2>
+
+    <video id="scenarioVideo" width="640" controls></video>
+
+    <div id="decisionPanel" class="decision-panel hidden">
+      <p>Time remaining: <span id="timerDisplay">5</span>s</p>
+      <p id="promptDisplay"></p>
+      <div id="optionsContainer"></div>
+    </div>
+
+    <p id="feedbackDisplay" class="feedback"></p>
+
+    <button id="nextBtn" class="btn hidden">Next Scenario</button>
+
+    <div id="completePanel" class="hidden">
+      <h2 class="section-title">Training Complete!</h2>
+      <p>You've been through all 10 scenarios.</p>
+    </div>
+  </main>
+
+  <script src="js/scenarios.js"></script>
+  <script src="js/progress-tracker.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

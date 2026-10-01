@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Court Vision — Progress</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="site-title">Court Vision</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="training.html">Training Mode</a>
+      <a href="challenge.html">Challenge Mode</a>
+      <a href="progress.html" class="active">Progress</a>
+    </nav>
+  </header>
+
+  <main class="container page-content">
+    <h1 class="page-title">Your Progress</h1>
+    <p class="subtitle">Track your accuracy and completed scenarios.</p>
+
+    <p id="emptyState" class="hidden">You haven't completed any scenarios yet — try Training or Challenge Mode first!</p>
+
+    <div id="statsWrapper">
+      <h2 class="section-title">Overview</h2>
+      <p>Accuracy: <strong id="accuracyDisplay">0%</strong></p>
+      <p>Scenarios Completed: <strong id="completedDisplay">0</strong></p>
+      <p>Current Level: <strong id="levelDisplay">Beginner</strong></p>
+
+      <h2 class="section-title">Recent Activity</h2>
+      <ul id="activityList"></ul>
+    </div>
+  </main>
+
+  <script src="js/progress-tracker.js"></script>
+  <script src="js/progress.js"></script>
+</body>
+</html>

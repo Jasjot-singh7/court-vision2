@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Court Vision — Challenge Mode</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="site-title">Court Vision</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="training.html">Training Mode</a>
+      <a href="challenge.html" class="active">Challenge Mode</a>
+      <a href="progress.html">Progress</a>
+    </nav>
+  </header>
+
+  <main class="container page-content">
+    <h1 class="page-title">Challenge Mode</h1>
+    <p class="subtitle">No hints. Complete every scenario, then see your score.</p>
+
+    <h2 id="scenarioCounter" class="section-title">Scenario 1 of 10</h2>
+
+    <video id="scenarioVideo" width="640" controls></video>
+
+    <div id="decisionPanel" class="decision-panel hidden">
+      <p>Time remaining: <span id="timerDisplay">5</span>s</p>
+      <p id="promptDisplay"></p>
+      <div id="optionsContainer"></div>
+    </div>
+
+    <div id="resultsPanel" class="hidden">
+      <h2 class="section-title">Results</h2>
+      <p id="resultsText"></p>
+    </div>
+  </main>
+
+  <script src="js/scenarios.js"></script>
+  <script src="js/progress-tracker.js"></script>
+  <script src="js/challenge.js"></script>
+</body>
+</html>
