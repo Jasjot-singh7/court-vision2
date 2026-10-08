@@ -1,8 +1,12 @@
 /* Court Vision — Scenario Data (Levels)
-   All 10 scenarios from the Requirements/Specifications table.
+   MVP note: trimmed to the first 3 of 10 scenarios from the
+   Requirements/Specifications table, to keep the MVP small and testable.
+   The remaining 7 are kept below, commented out, ready to restore for
+   Sprint 2 (MMP) — see your Development Plan table: "Construct Levels
+   2 and 3 with scaling difficulty curves."
 
-   MVP note: every scenario currently points at the same placeholder
-   clip (assets/videos/scenario1.mp4) since real footage isn't ready.
+   Every scenario currently points at the same placeholder clip
+   (assets/videos/scenario1.mp4) since real footage isn't ready yet.
    Once real clips exist, just change each scenario's videoSrc to its
    own file — nothing else in the code needs to change.
 
@@ -10,14 +14,13 @@
    guess at reasonable volleyball tactics based on your scenario
    descriptions — check these against what your coach (Bruce) would
    actually teach, and adjust the correct flags/explain text as needed.
-   You know the sport better than I do.
 */
 
 const scenarios = [
   {
     title: 'Setter Attack Choice',
     videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 4,
+    decisionPointSeconds: 3,
     prompt: 'You are the setter. Who do you set?',
     options: [
       { label: 'Outside', correct: true, explain: 'The outside hitter has a favourable one-on-one matchup.' },
@@ -28,12 +31,12 @@ const scenarios = [
   },
   {
     title: 'Blocking Decision',
-    videoSrc: 'assets/videos/scenario2.mp4',
-    decisionPointSeconds: 2,
-    prompt: 'Do you commit to the middle attacker or wait for another hitter?',
+    videoSrc: 'assets/videos/scenario1.mp4',
+    decisionPointSeconds: 3,
+    prompt: 'Do you commit to the middle attacker or stay with the outside hitter?',
     options: [
       { label: 'Commit to middle', correct: false, explain: 'The middle attack was a decoy this play.' },
-      { label: 'Wait for Pipe', correct: true, explain: 'The pipe  was the primary threat based on the setters hand positioning.' },
+      { label: 'Stay with outside', correct: true, explain: 'The outside was the primary threat based on the set.' },
     ],
   },
   {
@@ -47,6 +50,14 @@ const scenarios = [
       { label: 'Shift left', correct: false, explain: 'The server has not shown a tendency to target this zone.' },
     ],
   },
+];
+
+/* ----------------------------------------------------------------
+   The remaining 7 scenarios — commented out for MVP, restore for
+   Sprint 2 by moving these back above the closing "];" and deleting
+   this comment block and the one around them.
+   ----------------------------------------------------------------
+
   {
     title: 'Defensive Coverage',
     videoSrc: 'assets/videos/scenario1.mp4',
@@ -54,7 +65,7 @@ const scenarios = [
     prompt: 'Your team just attacked. Where do you position yourself?',
     options: [
       { label: 'Cover the hitter', correct: true, explain: 'Covering protects against a blocked ball rebounding down.' },
-      { label: 'Drop back to base defence', correct: false, explain: 'Too early — the ball hasn\u2019t crossed the net yet.' },
+      { label: 'Drop back to base defence', correct: false, explain: 'Too early — the ball hasn’t crossed the net yet.' },
       { label: 'Rotate to open zone', correct: false, explain: 'Coverage takes priority immediately after your own attack.' },
     ],
   },
@@ -125,4 +136,5 @@ const scenarios = [
       { label: 'Middle over shoulder', correct: false, explain: 'The middle is blocked in this scenario.' },
     ],
   },
-];
+
+---------------------------------------------------------------- */

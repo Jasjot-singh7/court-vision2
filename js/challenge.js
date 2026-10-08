@@ -1,7 +1,6 @@
-/* Court Vision — Core Mechanics for Challenge Mode (MVP + Levels)
-   Uses the same shared scenarios list as Training Mode (scenarios.js,
-   loaded before this file) — but NO feedback shown per scenario, only
-   a final score once every scenario is complete.
+/* Court Vision — Core Mechanics for Challenge Mode (MVP + Levels + Score/Data)
+   Uses the same shared scenarios list as Training Mode — but NO feedback
+   shown per scenario, only a final score once every scenario is complete.
 */
 
 const COUNTDOWN_SECONDS = 5;

@@ -1,7 +1,6 @@
-/* Court Vision — Core Mechanics for Training Mode (MVP + Levels)
-   Steps through every scenario in scenarios.js (loaded before this file).
-   Unlike Challenge Mode, feedback IS shown immediately after each pick,
-   plus a "Next Scenario" button to move on at the learner's own pace.
+/* Court Vision — Core Mechanics for Training Mode (MVP + Levels + Score/Data)
+   Steps through every scenario in scenarios.js. Feedback IS shown
+   immediately after each pick, plus a "Next Scenario" button.
 */
 
 const video = document.getElementById('scenarioVideo');

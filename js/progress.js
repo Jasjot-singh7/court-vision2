@@ -1,7 +1,4 @@
-/* Court Vision — Progress page display logic
-   Reads the session data tracked by progress-tracker.js (via Training
-   and Challenge Mode) and renders it on screen.
-*/
+/* Court Vision — Progress page display logic */
 
 const data = getProgressData();
 
