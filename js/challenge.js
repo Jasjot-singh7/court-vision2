@@ -49,7 +49,7 @@ function loadScenario(index) {
   const scenario = scenarios[index];
 
   playerMessage.classList.add('hidden');
-  skipBtn.classList.add('hidden');
+  skipBtn.classList.remove('hidden');
   decisionPanel.classList.add('hidden');
 
   scenarioCounter.textContent = `Scenario ${index + 1} of ${scenarios.length}`;
@@ -108,6 +108,7 @@ function goToNextScenario() {
 
 function showFinalResults() {
   stopClip();
+  skipBtn.classList.add('hidden');
   videoWrap.classList.add('hidden');
   videoCredit.classList.add('hidden');
   decisionPanel.classList.add('hidden');
@@ -136,4 +137,8 @@ function showPlayerProblem(message) {
   }
 }
 
-skipBtn.addEventListener('click', goToNextScenario);
+skipBtn.addEventListener('click', () => {
+  clearInterval(countdownInterval);
+  stopClip();
+  goToNextScenario();
+});

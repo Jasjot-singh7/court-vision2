@@ -18,7 +18,9 @@ const completePanel = document.getElementById('completePanel');
 const completeText = document.getElementById('completeText');
 const creditsList = document.getElementById('creditsList');
 const videoCredit = document.getElementById('videoCredit');
+const videoWrap = document.getElementById('videoWrap');
 const playerMessage = document.getElementById('playerMessage');
+const skipBtn = document.getElementById('skipBtn');
 
 const COUNTDOWN_SECONDS = 10;
 
@@ -53,6 +55,7 @@ function loadScenario(index) {
   playerMessage.classList.add('hidden');
   nextBtn.classList.add('hidden');
   decisionPanel.classList.add('hidden');
+  skipBtn.classList.remove('hidden');
 
   scenarioCounter.textContent = `Scenario ${index + 1} of ${scenarios.length}: ${scenario.title}`;
   promptDisplay.textContent = scenario.prompt;
@@ -90,6 +93,7 @@ function showDecisionPoint() {
 function handleDecision(chosenButton) {
   clearInterval(countdownInterval);
   decisionPanel.classList.add('hidden');
+  skipBtn.classList.add('hidden');
 
   const scenario = scenarios[currentIndex];
   let wasCorrect = false;
@@ -140,4 +144,18 @@ function showPlayerProblem(message) {
 nextBtn.addEventListener('click', () => {
   currentIndex++;
   loadScenario(currentIndex);
+});
+
+skipBtn.addEventListener('click', () => {
+  clearInterval(countdownInterval);
+  stopClip();
+  decisionPanel.classList.add('hidden');
+  skipBtn.classList.add('hidden');
+  if (currentIndex < scenarios.length - 1) {
+    currentIndex++;
+    loadScenario(currentIndex);
+  } else {
+    videoWrap.classList.add('hidden');
+    showNextOrFinish();
+  }
 });
