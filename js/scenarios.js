@@ -1,26 +1,38 @@
 /* Court Vision — Scenario Data (Levels)
-   MVP note: trimmed to the first 3 of 10 scenarios from the
-   Requirements/Specifications table, to keep the MVP small and testable.
-   The remaining 7 are kept below, commented out, ready to restore for
-   Sprint 2 (MMP) — see your Development Plan table: "Construct Levels
-   2 and 3 with scaling difficulty curves."
+   All 10 scenarios, each playing a short section of a YouTube video.
 
-   Every scenario currently points at the same placeholder clip
-   (assets/videos/scenario1.mp4) since real footage isn't ready yet.
-   Once real clips exist, just change each scenario's videoSrc to its
-   own file — nothing else in the code needs to change.
+   For each scenario:
+     start      = second in the YouTube video where the clip begins
+     decisionAt = second where the video pauses and the question appears
+     end        = second where the clip stops (the play after the decision)
+   Times are written t(minutes, seconds) so they match the YouTube player clock.
+   Example: t(2, 11) is 2:11 on the video.
 
-   IMPORTANT: the "correct" answers and explanations below are my best
-   guess at reasonable volleyball tactics based on your scenario
-   descriptions — check these against what your coach (Bruce) would
-   actually teach, and adjust the correct flags/explain text as needed.
+   IMPORTANT: the "correct" answers and explanations are still placeholders
+   I wrote. Now that real footage is in, re-check each one against what
+   actually happens in its clip (and with your coach) and adjust them.
 */
+
+function t(minutes, seconds) {
+  return minutes * 60 + seconds;
+}
+
+const SOURCES = {
+  brazilJapan: {
+    videoId: 'bGm1S2yQAxg',
+    credit: "Brazil vs. Japan - Men's World Championship 2022 | Full Match - Volleyball (Volleyball World, YouTube)",
+  },
+  serves: {
+    videoId: 'rchcsWcOayA',
+    credit: 'Most Powerful Volleyball Serves by Kento Miyaura | VNL 2025 (Power Volleyball, YouTube)',
+  },
+};
 
 const scenarios = [
   {
     title: 'Setter Attack Choice',
-    videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 3,
+    ...SOURCES.brazilJapan,
+    start: t(0, 18), decisionAt: t(0, 24), end: t(0, 26),
     prompt: 'You are the setter. Who do you set?',
     options: [
       { label: 'Outside', correct: true, explain: 'The outside hitter has a favourable one-on-one matchup.' },
@@ -31,8 +43,8 @@ const scenarios = [
   },
   {
     title: 'Blocking Decision',
-    videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 3,
+    ...SOURCES.brazilJapan,
+    start: t(2, 11), decisionAt: t(2, 18), end: t(2, 21),
     prompt: 'Do you commit to the middle attacker or stay with the outside hitter?',
     options: [
       { label: 'Commit to middle', correct: false, explain: 'The middle attack was a decoy this play.' },
@@ -41,8 +53,8 @@ const scenarios = [
   },
   {
     title: 'Serve Receive Positioning',
-    videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 3,
+    ...SOURCES.brazilJapan,
+    start: t(2, 35), decisionAt: t(2, 39), end: t(2, 43),
     prompt: 'Where do you move before receiving the serve?',
     options: [
       { label: 'Move forward', correct: false, explain: 'This leaves space behind you exposed to a deep serve.' },
@@ -50,18 +62,10 @@ const scenarios = [
       { label: 'Shift left', correct: false, explain: 'The server has not shown a tendency to target this zone.' },
     ],
   },
-];
-
-/* ----------------------------------------------------------------
-   The remaining 7 scenarios — commented out for MVP, restore for
-   Sprint 2 by moving these back above the closing "];" and deleting
-   this comment block and the one around them.
-   ----------------------------------------------------------------
-
   {
     title: 'Defensive Coverage',
-    videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 3,
+    ...SOURCES.brazilJapan,
+    start: t(5, 11), decisionAt: t(5, 16), end: t(5, 24),
     prompt: 'Your team just attacked. Where do you position yourself?',
     options: [
       { label: 'Cover the hitter', correct: true, explain: 'Covering protects against a blocked ball rebounding down.' },
@@ -71,8 +75,8 @@ const scenarios = [
   },
   {
     title: 'Free Ball Communication',
-    videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 3,
+    ...SOURCES.brazilJapan,
+    start: t(8, 8), decisionAt: t(8, 14), end: t(8, 20),
     prompt: 'A free ball is coming over. What do you do?',
     options: [
       { label: 'Call "Mine!" and take it', correct: true, explain: 'Clear, early communication prevents collisions and confusion.' },
@@ -82,8 +86,8 @@ const scenarios = [
   },
   {
     title: 'Serving Strategy',
-    videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 3,
+    ...SOURCES.serves,
+    start: t(0, 0), decisionAt: t(0, 4), end: t(0, 9),
     prompt: 'Which player do you target with your serve?',
     options: [
       { label: 'Target the weakest passer', correct: true, explain: 'Pressuring the weakest passer disrupts their offense most.' },
@@ -93,8 +97,8 @@ const scenarios = [
   },
   {
     title: 'Backcourt Defensive Decision',
-    videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 3,
+    ...SOURCES.brazilJapan,
+    start: t(21, 0), decisionAt: t(21, 7), end: t(21, 11),
     prompt: 'Based on the attacker\'s approach, where do you move?',
     options: [
       { label: 'Move to line', correct: false, explain: 'The block is already covering the line on this play.' },
@@ -103,20 +107,9 @@ const scenarios = [
     ],
   },
   {
-    title: 'Emergency Save Situation',
-    videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 3,
-    prompt: 'The ball is dropping fast and you are off balance. What do you do?',
-    options: [
-      { label: 'Bump it', correct: false, explain: 'Too little control in this position — risks an uncontrolled rebound.' },
-      { label: 'Set it', correct: false, explain: 'Not enough time/control to execute a clean set here.' },
-      { label: 'Free the ball back over', correct: true, explain: 'When under extreme pressure, safely returning the ball prevents a lost point.' },
-    ],
-  },
-  {
     title: 'Transition Attack',
-    videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 3,
+    ...SOURCES.brazilJapan,
+    start: t(20, 45), decisionAt: t(20, 50), end: t(20, 53),
     prompt: 'Your team just defended successfully. What\'s the best attack option?',
     options: [
       { label: 'Quick attack', correct: true, explain: 'The block hasn\'t reset yet, so a fast tempo attack catches them out of position.' },
@@ -126,8 +119,8 @@ const scenarios = [
   },
   {
     title: 'Out of System Setting',
-    videoSrc: 'assets/videos/scenario1.mp4',
-    decisionPointSeconds: 3,
+    ...SOURCES.brazilJapan,
+    start: t(19, 48), decisionAt: t(19, 51), end: t(19, 54),
     prompt: 'The pass is off the net. Where do you set?',
     options: [
       { label: 'Opposite', correct: false, explain: 'The opposite is well covered here.' },
@@ -136,5 +129,20 @@ const scenarios = [
       { label: 'Middle over shoulder', correct: false, explain: 'The middle is blocked in this scenario.' },
     ],
   },
+  {
+    title: 'Emergency Save Situation',
+    ...SOURCES.brazilJapan,
+    start: t(19, 49), decisionAt: t(19, 54), end: t(19, 59),
+    prompt: 'The ball is dropping fast and you are off balance. What do you do?',
+    options: [
+      { label: 'Bump it', correct: false, explain: 'Too little control in this position — risks an uncontrolled rebound.' },
+      { label: 'Set it', correct: false, explain: 'Not enough time/control to execute a clean set here.' },
+      { label: 'Free the ball back over', correct: true, explain: 'When under extreme pressure, safely returning the ball prevents a lost point.' },
+    ],
+  },
+];
 
----------------------------------------------------------------- */
+// The distinct video credits, for the end-of-mode credits list
+function getUniqueCredits() {
+  return [...new Set(scenarios.map(s => s.credit))];
+}

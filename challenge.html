@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Court Vision — Challenge Mode</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -21,12 +22,27 @@
     <h1 class="page-title">Challenge Mode</h1>
     <p class="subtitle">No hints. Complete every scenario, then see your score.</p>
 
-    <h2 id="scenarioCounter" class="section-title">Scenario 1 of 10</h2>
+    <div id="startPanel" class="start-panel">
+      <h2 class="section-title">How it works</h2>
+      <ol class="how-list">
+        <li>Watch the clip. It pauses at a decision point.</li>
+        <li>Pick the best option before the 10 second timer runs out.</li>
+        <li>You won't see any feedback until the end, when you get your score.</li>
+      </ol>
+      <button id="startBtn" class="btn">Start Challenge</button>
+    </div>
 
-    <video id="scenarioVideo" width="640" controls></video>
+    <h2 id="scenarioCounter" class="section-title hidden"></h2>
+
+    <div id="videoWrap" class="video-wrap">
+      <div id="player"></div>
+    </div>
+    <p id="videoCredit" class="video-credit"></p>
+    <p id="playerMessage" class="feedback incorrect hidden"></p>
+    <button id="skipBtn" class="btn hidden">Skip this scenario</button>
 
     <div id="decisionPanel" class="decision-panel hidden">
-      <p>Time remaining: <span id="timerDisplay">5</span>s</p>
+      <p>Time remaining: <span id="timerDisplay">10</span>s</p>
       <p id="promptDisplay"></p>
       <div id="optionsContainer"></div>
     </div>
@@ -34,11 +50,14 @@
     <div id="resultsPanel" class="hidden">
       <h2 class="section-title">Results</h2>
       <p id="resultsText"></p>
+      <h2 class="section-title">Video credits</h2>
+      <ul id="creditsList" class="credits-list"></ul>
     </div>
   </main>
 
   <script src="js/scenarios.js"></script>
   <script src="js/progress-tracker.js"></script>
+  <script src="js/yt-player.js"></script>
   <script src="js/challenge.js"></script>
 </body>
 </html>

@@ -189,3 +189,58 @@ p.subtitle {
 .feedback.incorrect {
   color: #b3261e;
 }
+
+/* ====================================================
+   YouTube video player, start panel and credits
+   ==================================================== */
+
+.video-wrap {
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+  background: #0A2342;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.video-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-credit {
+  font-size: 0.8rem;
+  color: #555;
+  margin-top: 0.4rem;
+}
+
+.start-panel {
+  max-width: 520px;
+  margin: 0 auto 1.5rem;
+  text-align: left;
+}
+
+.start-panel .section-title {
+  text-align: center;
+}
+
+.how-list {
+  margin: 0.5rem 0 1.2rem 1.4rem;
+}
+
+.start-panel .btn {
+  display: block;
+  margin: 0 auto;
+}
+
+.credits-list {
+  list-style: none;
+  font-size: 0.9rem;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

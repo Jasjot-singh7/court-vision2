@@ -1,34 +1,60 @@
-/* Court Vision — Core Mechanics for Challenge Mode (MVP + Levels + Score/Data)
-   Uses the same shared scenarios list as Training Mode — but NO feedback
-   shown per scenario, only a final score once every scenario is complete.
+/* Court Vision — Challenge Mode (YouTube player version)
+   Same clips and countdown as Training Mode, but NO feedback per scenario
+   (and no outcome clip, which would give the answer away). Only a final
+   score once every scenario is complete.
 */
 
-const COUNTDOWN_SECONDS = 5;
-
-let currentIndex = 0;
-let correctCount = 0;
-let hasPausedForDecision = false;
-let countdownInterval = null;
-let timeRemaining = COUNTDOWN_SECONDS;
-
-const video = document.getElementById('scenarioVideo');
+const startPanel = document.getElementById('startPanel');
+const startBtn = document.getElementById('startBtn');
+const videoWrap = document.getElementById('videoWrap');
 const decisionPanel = document.getElementById('decisionPanel');
 const timerDisplay = document.getElementById('timerDisplay');
 const promptDisplay = document.getElementById('promptDisplay');
 const optionsContainer = document.getElementById('optionsContainer');
 const scenarioCounter = document.getElementById('scenarioCounter');
+const videoCredit = document.getElementById('videoCredit');
+const playerMessage = document.getElementById('playerMessage');
+const skipBtn = document.getElementById('skipBtn');
 const resultsPanel = document.getElementById('resultsPanel');
 const resultsText = document.getElementById('resultsText');
+const creditsList = document.getElementById('creditsList');
 
-loadScenario(currentIndex);
+const COUNTDOWN_SECONDS = 10;
+
+let currentIndex = 0;
+let correctCount = 0;
+let started = false;
+let countdownInterval = null;
+let timeRemaining = COUNTDOWN_SECONDS;
+
+startBtn.disabled = true;
+startBtn.textContent = 'Loading video player...';
+
+loadYouTubeApi(
+  () => {
+    startBtn.disabled = false;
+    startBtn.textContent = 'Start Challenge';
+  },
+  showPlayerProblem
+);
+
+startBtn.addEventListener('click', () => {
+  started = true;
+  startPanel.classList.add('hidden');
+  scenarioCounter.classList.remove('hidden');
+  loadScenario(0);
+});
 
 function loadScenario(index) {
-  hasPausedForDecision = false;
   const scenario = scenarios[index];
+
+  playerMessage.classList.add('hidden');
+  skipBtn.classList.add('hidden');
+  decisionPanel.classList.add('hidden');
 
   scenarioCounter.textContent = `Scenario ${index + 1} of ${scenarios.length}`;
   promptDisplay.textContent = scenario.prompt;
-  decisionPanel.classList.add('hidden');
+  videoCredit.textContent = `Video: ${scenario.credit}`;
 
   optionsContainer.innerHTML = '';
   scenario.options.forEach(option => {
@@ -40,19 +66,8 @@ function loadScenario(index) {
     optionsContainer.appendChild(btn);
   });
 
-  video.src = scenario.videoSrc;
-  video.load();
-  video.play();
+  playClip(scenario, showDecisionPoint);
 }
-
-video.addEventListener('timeupdate', () => {
-  const decisionPoint = scenarios[currentIndex].decisionPointSeconds;
-  if (!hasPausedForDecision && video.currentTime >= decisionPoint) {
-    hasPausedForDecision = true;
-    video.pause();
-    showDecisionPoint();
-  }
-});
 
 function showDecisionPoint() {
   decisionPanel.classList.remove('hidden');
@@ -78,6 +93,10 @@ function handleDecision(chosenButton) {
 
   recordAttempt('Challenge', scenario.title, wasCorrect);
 
+  goToNextScenario();
+}
+
+function goToNextScenario() {
   currentIndex++;
 
   if (currentIndex < scenarios.length) {
@@ -88,9 +107,33 @@ function handleDecision(chosenButton) {
 }
 
 function showFinalResults() {
-  video.classList.add('hidden');
+  stopClip();
+  videoWrap.classList.add('hidden');
+  videoCredit.classList.add('hidden');
   decisionPanel.classList.add('hidden');
   scenarioCounter.classList.add('hidden');
-  resultsPanel.classList.remove('hidden');
+
   resultsText.textContent = `You got ${correctCount} out of ${scenarios.length} correct.`;
+  creditsList.innerHTML = '';
+  getUniqueCredits().forEach(credit => {
+    const li = document.createElement('li');
+    li.textContent = credit;
+    creditsList.appendChild(li);
+  });
+  resultsPanel.classList.remove('hidden');
 }
+
+function showPlayerProblem(message) {
+  playerMessage.textContent = message;
+  playerMessage.classList.remove('hidden');
+
+  // If a video fails part-way through, let the user skip it (not counted)
+  if (started) {
+    stopClip();
+    clearInterval(countdownInterval);
+    decisionPanel.classList.add('hidden');
+    skipBtn.classList.remove('hidden');
+  }
+}
+
+skipBtn.addEventListener('click', goToNextScenario);
