@@ -1,9 +1,9 @@
-/* Court Vision — base styles
-   Colour palette from your Design doc:
-   Dark Navy #0A2342 | Volleyball Orange #F28C28 | Off White #F8F9FA
-   MVP note: fonts/colours are still placeholders — Colour gets properly
-   styled in Sprint 2, so keep this minimal.
+/* Court Vision — Main Stylesheet
+   Theme: Dark Navy (#0A2342) / Card Navy (#13315C) / Volleyball Orange (#F28C28) / Off White (#F8F9FA)
+   Typography: Montserrat Bold (Titles/Headers) + Open Sans (Body/Buttons)
 */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
 
 * {
   box-sizing: border-box;
@@ -12,9 +12,9 @@
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif; /* MVP placeholder font */
-  background: #F8F9FA;
-  color: #0A2342;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  background: #0A2342;
+  color: #F8F9FA;
   line-height: 1.5;
 }
 
@@ -51,11 +51,10 @@ a {
 
 /* ====================================================
    Site header / navigation
-   Chosen from trial: Horizontal Top Bar
    ==================================================== */
 
 header.site-header {
-  background: #0A2342;
+  background: #06162B;
   color: #F8F9FA;
   display: flex;
   align-items: center;
@@ -65,8 +64,9 @@ header.site-header {
 }
 
 header.site-header .site-title {
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 header.site-header nav {
@@ -91,8 +91,13 @@ header.site-header nav a:hover {
 }
 
 /* ====================================================
-   Titles / Headers / Text — MVP placeholder styles
+   Titles / Headers / Text — Typography Pairing
    ==================================================== */
+
+h1, h2, h3, .page-title, .section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
 
 h1.page-title {
   font-size: 1.8rem;
@@ -106,7 +111,7 @@ h2.section-title {
 
 p.subtitle {
   font-size: 1rem;
-  color: #333;
+  color: #B8C4D6;
   margin-bottom: 1.5rem;
 }
 
@@ -126,7 +131,7 @@ p.subtitle {
   display: block;
   width: 100%;
   max-width: 320px;
-  background: #0A2342;
+  background: #13315C;
   color: #F8F9FA;
   padding: 1.2rem;
   border-radius: 8px;
@@ -146,7 +151,7 @@ p.subtitle {
   font-weight: normal;
   font-size: 0.9rem;
   margin-top: 0.4rem;
-  color: #F8F9FA;
+  color: #B8C4D6;
 }
 
 .mode-card:hover .mode-card-desc {
@@ -170,6 +175,7 @@ p.subtitle {
   border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .decision-btn:hover {
@@ -183,11 +189,11 @@ p.subtitle {
 }
 
 .feedback.correct {
-  color: #1a7a3c;
+  color: #5FD38D;
 }
 
 .feedback.incorrect {
-  color: #b3261e;
+  color: #FF8A80;
 }
 
 /* ====================================================
@@ -199,7 +205,7 @@ p.subtitle {
   max-width: 640px;
   aspect-ratio: 16 / 9;
   margin: 0 auto;
-  background: #0A2342;
+  background: #000;
   border-radius: 6px;
   overflow: hidden;
 }
@@ -212,7 +218,7 @@ p.subtitle {
 
 .video-credit {
   font-size: 0.8rem;
-  color: #555;
+  color: #B8C4D6;
   margin-top: 0.4rem;
 }
 
@@ -220,6 +226,9 @@ p.subtitle {
   max-width: 520px;
   margin: 0 auto 1.5rem;
   text-align: left;
+  background: #13315C;
+  padding: 1.5rem;
+  border-radius: 8px;
 }
 
 .start-panel .section-title {
@@ -228,6 +237,7 @@ p.subtitle {
 
 .how-list {
   margin: 0.5rem 0 1.2rem 1.4rem;
+  color: #B8C4D6;
 }
 
 .start-panel .btn {
@@ -238,6 +248,7 @@ p.subtitle {
 .credits-list {
   list-style: none;
   font-size: 0.9rem;
+  color: #B8C4D6;
 }
 
 .btn:disabled {

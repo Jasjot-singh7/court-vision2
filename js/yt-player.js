@@ -10,6 +10,7 @@ let ytOnError = null;
 let decisionWatcher = null;
 let decisionFallback = null;
 let pendingDecision = null;
+let clipArmed = false; // true once real playback of the current clip has been seen
 
 // Fires the decision point once, whichever trigger gets there first
 function fireDecision() {
@@ -49,7 +50,7 @@ function onYouTubeIframeAPIReady() {
       onReady: () => ytOnReady(),
       onStateChange: (e) => {
         // Clip reached its end time before the decision point fired
-        if (e.data === YT.PlayerState.ENDED) fireDecision();
+        if (e.data === YT.PlayerState.ENDED && clipArmed) fireDecision();
       },
       onError: () => ytOnError("This video can't be played here. It may have been removed, or its owner may have turned off embedding."),
     },
@@ -63,6 +64,7 @@ function onYouTubeIframeAPIReady() {
 function playClip(scenario, onDecisionPoint) {
   stopWatching();
   pendingDecision = onDecisionPoint;
+  clipArmed = false;
   ytPlayer.loadVideoById({
     videoId: scenario.videoId,
     startSeconds: scenario.start,
@@ -73,7 +75,7 @@ function playClip(scenario, onDecisionPoint) {
   // The player can briefly report the PREVIOUS clip's time after loading a new
   // video, so only start checking once we've seen real playback inside this
   // clip, before the decision point.
-  let armed = false;
+  let armed = false; // local mirror of clipArmed
 
   const loadedAt = Date.now();
   let lastKick = loadedAt;
@@ -94,7 +96,10 @@ function playClip(scenario, onDecisionPoint) {
     const now = ytPlayer.getCurrentTime();
 
     if (!armed) {
-      if (now >= scenario.start - 1 && now < scenario.decisionAt) armed = true;
+      if (now >= scenario.start - 1 && now < scenario.decisionAt) {
+        armed = true;
+        clipArmed = true;
+      }
       return;
     }
 
