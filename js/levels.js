@@ -28,6 +28,7 @@ Object.keys(LEVELS).forEach(n => {
 
   const card = document.createElement('div');
   card.className = 'level-card' + (unlocked ? '' : ' locked');
+  card.dataset.level = level;
 
   const title = document.createElement('h2');
   title.className = 'level-title';

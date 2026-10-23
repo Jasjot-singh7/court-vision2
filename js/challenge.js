@@ -26,6 +26,8 @@ if (!level || !isLevelUnlocked(level)) {
 const levelScenarios = level ? getScenariosForLevel(level) : [];
 const levelBadge = document.getElementById('levelBadge');
 if (level) {
+  levelBadge.dataset.level = level;
+  videoWrap.dataset.level = level;
   levelBadge.textContent = `Level ${level}: ${LEVELS[level].name} · ${LEVELS[level].seconds} seconds per decision`;
   document.getElementById('howSeconds').textContent = LEVELS[level].seconds;
 }
@@ -66,6 +68,9 @@ function loadScenario(index) {
   skipBtn.classList.remove('hidden');
   decisionPanel.classList.add('hidden');
 
+  scenarioCounter.classList.remove('fade-in');
+  void scenarioCounter.offsetWidth;
+  scenarioCounter.classList.add('fade-in');
   scenarioCounter.textContent = `Scenario ${index + 1} of ${levelScenarios.length}`;
   promptDisplay.textContent = scenario.prompt;
   videoCredit.textContent = `Video: ${scenario.credit}`;

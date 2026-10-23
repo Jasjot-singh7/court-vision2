@@ -149,16 +149,18 @@ header.site-header nav a:hover {
 
 h1.page-title {
   font-family: var(--font-heading);
-  font-size: 3rem;
+  font-size: clamp(2.4rem, 6vw, 3.8rem);
   font-weight: 400;
   letter-spacing: 1.5px;
   line-height: 1.1;
+  text-shadow: 0 0 18px rgba(242, 140, 40, 0.45);
+  animation: title-in 0.7s ease-out both;
   margin-bottom: 0.5rem;
 }
 
 h2.section-title {
   font-family: var(--font-heading);
-  font-size: 1.8rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 400;
   letter-spacing: 1px;
   line-height: 1.2;
@@ -390,7 +392,6 @@ p.subtitle {
 }
 
 @media (max-width: 600px) {
-  h1.page-title { font-size: 2.3rem; }
   header.site-header { flex-direction: column; align-items: flex-start; }
 }
 
@@ -643,4 +644,166 @@ p.subtitle {
 
 @media (prefers-reduced-motion: reduce) {
   .video-wrap.slowmo::after { animation: none; }
+}
+
+/* ====================================================
+   MAP — Colour: level colours and cinematic video grade
+   Heat scale gold -> orange -> red-orange for rising difficulty.
+   Contrast on navy: 10.2, 6.4, 5.6 (all pass 4.5:1).
+   ==================================================== */
+
+:root {
+  --level-1: #FFC857;
+  --level-2: #F28C28;
+  --level-3: #FF6B4A;
+}
+
+.level-card[data-level="1"], .level-badge[data-level="1"] { --lvl: var(--level-1); }
+.level-card[data-level="2"], .level-badge[data-level="2"] { --lvl: var(--level-2); }
+.level-card[data-level="3"], .level-badge[data-level="3"] { --lvl: var(--level-3); }
+
+.level-card {
+  border-top: 6px solid var(--lvl, var(--accent));
+}
+
+.level-card .level-title,
+.level-badge[data-level] {
+  color: var(--lvl, var(--accent));
+}
+
+.level-badge[data-level] {
+  border: 2px solid var(--lvl, var(--accent));
+}
+
+/* Cinematic grade: richer contrast and colour, a warm/cool tint and a vignette.
+   Applied with CSS because the footage is embedded from YouTube and cannot be
+   edited. Harder levels are graded a little cooler and darker. */
+
+.video-wrap iframe {
+  filter: contrast(1.08) saturate(1.15) brightness(0.97);
+}
+
+.video-wrap[data-level="2"] iframe {
+  filter: contrast(1.1) saturate(1.12) brightness(0.96);
+}
+
+.video-wrap[data-level="3"] iframe {
+  filter: contrast(1.14) saturate(1.05) brightness(0.93) hue-rotate(-4deg);
+}
+
+.video-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 55%, rgba(6, 22, 43, 0.55) 100%),
+    linear-gradient(135deg, rgba(242, 140, 40, 0.10), rgba(10, 35, 66, 0.12));
+}
+
+.video-wrap.slowmo::after {
+  z-index: 3;
+}
+
+/* Viewer chose "Original" look */
+body.no-grade .video-wrap iframe {
+  filter: none;
+}
+
+body.no-grade .video-wrap::before {
+  display: none;
+}
+
+/* ====================================================
+   MAP — Titles / Text / Headers: animation and glow
+   ==================================================== */
+
+@keyframes title-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes glow-pulse {
+  from { text-shadow: 0 0 10px rgba(242, 140, 40, 0.30); }
+  to   { text-shadow: 0 0 22px rgba(242, 140, 40, 0.65); }
+}
+
+/* Orange line that draws itself under each page title */
+h1.page-title::after {
+  content: '';
+  display: block;
+  height: 4px;
+  width: 0;
+  margin: 0.4rem auto 0;
+  background: var(--accent);
+  border-radius: 2px;
+  animation: trace-line 0.9s 0.3s ease-out forwards;
+}
+
+@keyframes trace-line {
+  to { width: min(160px, 40%); }
+}
+
+/* Scenario heading fades in each time it changes (class re-added by JS) */
+.fade-in {
+  animation: title-in 0.5s ease-out both;
+}
+
+/* Home page hero: title traced like a pen, then filled */
+.hero-title {
+  margin: 0 auto 0.5rem;
+  max-width: 640px;
+  animation: none;
+  text-shadow: none;
+}
+
+.hero-title::after {
+  display: none;
+}
+
+.hero-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.hero-svg text {
+  font-family: var(--font-heading);
+  font-size: 118px;
+  letter-spacing: 6px;
+  fill: transparent;
+  fill-opacity: 0;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation:
+    trace-text 2.2s ease-in-out forwards,
+    fill-text 0.8s 2s ease-out forwards,
+    glow-pulse 2.4s 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes trace-text {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fill-text {
+  to { fill: var(--text); fill-opacity: 1; stroke: var(--accent); }
+}
+
+.hero-svg text {
+  filter: drop-shadow(0 0 10px rgba(242, 140, 40, 0.45));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  h1.page-title,
+  .fade-in { animation: none; }
+  h1.page-title::after { animation: none; width: 120px; }
+  .hero-svg text {
+    animation: none;
+    fill: var(--text);
+    fill-opacity: 1;
+    stroke-dashoffset: 0;
+  }
 }
