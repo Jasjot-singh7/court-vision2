@@ -19,7 +19,17 @@ const resultsPanel = document.getElementById('resultsPanel');
 const resultsText = document.getElementById('resultsText');
 const creditsList = document.getElementById('creditsList');
 
-const COUNTDOWN_SECONDS = 10;
+const level = getRequestedLevel();
+if (!level || !isLevelUnlocked(level)) {
+  location.replace('levels.html?mode=challenge');
+}
+const levelScenarios = level ? getScenariosForLevel(level) : [];
+const levelBadge = document.getElementById('levelBadge');
+if (level) {
+  levelBadge.textContent = `Level ${level}: ${LEVELS[level].name} · ${LEVELS[level].seconds} seconds per decision`;
+  document.getElementById('howSeconds').textContent = LEVELS[level].seconds;
+}
+const COUNTDOWN_SECONDS = level ? LEVELS[level].seconds : 10;
 
 let currentIndex = 0;
 let correctCount = 0;
@@ -47,13 +57,13 @@ startBtn.addEventListener('click', () => {
 });
 
 function loadScenario(index) {
-  const scenario = scenarios[index];
+  const scenario = levelScenarios[index];
 
   playerMessage.classList.add('hidden');
   skipBtn.classList.remove('hidden');
   decisionPanel.classList.add('hidden');
 
-  scenarioCounter.textContent = `Scenario ${index + 1} of ${scenarios.length}`;
+  scenarioCounter.textContent = `Scenario ${index + 1} of ${levelScenarios.length}`;
   promptDisplay.textContent = scenario.prompt;
   videoCredit.textContent = `Video: ${scenario.credit}`;
 
@@ -94,7 +104,7 @@ function handleDecision(chosenButton) {
   clearInterval(countdownInterval);
   stopTimerBar();
 
-  const scenario = scenarios[currentIndex];
+  const scenario = levelScenarios[currentIndex];
   const wasCorrect = !!(chosenButton && chosenButton.dataset.correct === 'true');
   if (wasCorrect) correctCount++;
 
@@ -108,7 +118,7 @@ function handleDecision(chosenButton) {
 function goToNextScenario() {
   currentIndex++;
 
-  if (currentIndex < scenarios.length) {
+  if (currentIndex < levelScenarios.length) {
     loadScenario(currentIndex);
   } else {
     showFinalResults();
@@ -123,15 +133,16 @@ function showFinalResults() {
   decisionPanel.classList.add('hidden');
   scenarioCounter.classList.add('hidden');
 
-  resultsText.textContent = `You got ${correctCount} out of ${scenarios.length} correct.`;
+  resultsText.textContent = `You got ${correctCount} out of ${levelScenarios.length} correct on ${LEVELS[level].name}.` +
+    levelResultMessage(correctCount, levelScenarios.length);
   creditsList.innerHTML = '';
-  getUniqueCredits().forEach(credit => {
+  getUniqueCredits(levelScenarios).forEach(credit => {
     const li = document.createElement('li');
     li.textContent = credit;
     creditsList.appendChild(li);
   });
   resultsPanel.classList.remove('hidden');
-  recordChallengeScore(correctCount, scenarios.length);
+  recordChallengeScore(correctCount, levelScenarios.length);
   playSound('complete');
 }
 
@@ -154,3 +165,14 @@ skipBtn.addEventListener('click', () => {
   stopClip();
   goToNextScenario();
 });
+
+function levelResultMessage(correct, total) {
+  const run = recordLevelRun(level, correct, total);
+  if (run.newlyUnlocked) {
+    return ` Level ${run.newlyUnlocked} (${LEVELS[run.newlyUnlocked].name}) unlocked!`;
+  }
+  if (!run.passed) {
+    return ` Get at least ${PASS_PERCENT}% to unlock the next level.`;
+  }
+  return '';
+}

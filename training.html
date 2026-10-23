@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script>if (!/[?&]level=\d/.test(location.search)) location.replace('levels.html?mode=training');</script>
 </head>
 <body>
 
@@ -25,11 +26,13 @@
     <h1 class="page-title">Training Mode</h1>
     <p class="subtitle">Watch a scenario, then choose what happens next.</p>
 
+    <p id="levelBadge" class="level-badge"></p>
+
     <div id="startPanel" class="start-panel">
       <h2 class="section-title">How it works</h2>
       <ol class="how-list">
         <li>Watch the clip. It pauses at a decision point.</li>
-        <li>Pick the best option before the 10 second timer runs out.</li>
+        <li>Pick the best option before the <span id="howSeconds">10</span> second timer runs out.</li>
         <li>You'll see feedback, then the play carries on to show what happened.</li>
       </ol>
       <button id="startBtn" class="btn">Start Training</button>
@@ -58,6 +61,7 @@
     <div id="completePanel" class="hidden">
       <h2 class="section-title">Training Complete!</h2>
       <p id="completeText"></p>
+      <a href="levels.html?mode=training" class="btn">Choose a level</a>
       <h2 class="section-title">Video credits</h2>
       <ul id="creditsList" class="credits-list"></ul>
     </div>
@@ -65,6 +69,7 @@
 
   <script src="js/audio.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
   <script src="js/scenarios.js"></script>
   <script src="js/progress-tracker.js"></script>
   <script src="js/timer-bar.js"></script>

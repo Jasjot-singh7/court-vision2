@@ -19,6 +19,7 @@ function emptyProgress() {
     },
     byScenario: {},          // title -> { attempted, correct }
     bestChallenge: null,     // { correct, total }
+    levelBest: {},           // level number -> { correct, total } best run
   };
 }
 
@@ -68,6 +69,43 @@ function recordAttempt(mode, scenarioTitle, wasCorrect) {
   saveProgressData(data);
 }
 
+// Called when ANY run of a level finishes (Training or Challenge).
+// Keeps the best percentage for the level. Returns whether this run passed
+// and which level, if any, it newly unlocked.
+function recordLevelRun(level, correct, total) {
+  const data = getProgressData();
+  const wasUnlocked = isLevelUnlocked(level + 1);
+
+  const best = data.levelBest[level];
+  if (!best || correct / total > best.correct / best.total) {
+    data.levelBest[level] = { correct, total };
+  }
+  saveProgressData(data);
+
+  const passed = (correct / total) * 100 >= PASS_PERCENT;
+  const nowUnlocked = LEVELS[level + 1] && isLevelUnlocked(level + 1);
+  return { passed, newlyUnlocked: (!wasUnlocked && nowUnlocked) ? level + 1 : null };
+}
+
+function levelPassed(level) {
+  const best = getProgressData().levelBest[level];
+  return !!best && (best.correct / best.total) * 100 >= PASS_PERCENT;
+}
+
+// Level 1 is always open. Level N opens when level N-1 has been passed.
+// ?unlock=all on the Levels page opens everything (for testing/marking).
+function isLevelUnlocked(level) {
+  if (level <= 1) return true;
+  try { if (sessionStorage.getItem('courtVisionUnlockAll') === 'yes') return true; } catch (e) {}
+  return levelPassed(level - 1);
+}
+
+function getHighestUnlockedLevel() {
+  let highest = 1;
+  Object.keys(LEVELS).forEach(n => { if (isLevelUnlocked(Number(n))) highest = Number(n); });
+  return highest;
+}
+
 // Called when a Challenge run finishes; keeps the best percentage
 function recordChallengeScore(correct, total) {
   const data = getProgressData();
@@ -82,8 +120,7 @@ function resetProgress() {
   try { const s = progressStore(); s.store.removeItem(s.key); } catch (e) {}
 }
 
-function getCurrentLevel(totalAttempted) {
-  if (totalAttempted < 5) return 'Beginner';
-  if (totalAttempted < 15) return 'Intermediate';
-  return 'Advanced';
+// Name of the highest level the player has unlocked
+function getCurrentLevel() {
+  return LEVELS[getHighestUnlockedLevel()].name;
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Court Vision — Choose a Level</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="site-title">Court Vision</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="training.html">Training Mode</a>
+      <a href="challenge.html">Challenge Mode</a>
+      <a href="progress.html">Progress</a>
+    </nav>
+  </header>
+
+  <main class="container page-content">
+    <h1 class="page-title">Choose a Level</h1>
+    <p id="modeText" class="subtitle"></p>
+
+    <div class="mode-switch">
+      <a id="modeTraining" href="levels.html?mode=training" class="auth-tab">Training</a>
+      <a id="modeChallenge" href="levels.html?mode=challenge" class="auth-tab">Challenge</a>
+    </div>
+
+    <div id="levelGrid" class="level-grid"></div>
+  </main>
+
+  <script src="js/audio.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/scenarios.js"></script>
+  <script src="js/progress-tracker.js"></script>
+  <script src="js/levels.js"></script>
+</body>
+</html>

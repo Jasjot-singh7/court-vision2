@@ -22,9 +22,21 @@ const videoWrap = document.getElementById('videoWrap');
 const playerMessage = document.getElementById('playerMessage');
 const skipBtn = document.getElementById('skipBtn');
 
-const COUNTDOWN_SECONDS = 10;
+const level = getRequestedLevel();
+if (!level || !isLevelUnlocked(level)) {
+  location.replace('levels.html?mode=training');
+}
+const levelScenarios = level ? getScenariosForLevel(level) : [];
+const levelBadge = document.getElementById('levelBadge');
+if (level) {
+  levelBadge.textContent = `Level ${level}: ${LEVELS[level].name} · ${LEVELS[level].seconds} seconds per decision`;
+  document.getElementById('howSeconds').textContent = LEVELS[level].seconds;
+}
+const COUNTDOWN_SECONDS = level ? LEVELS[level].seconds : 10;
 
 let currentIndex = 0;
+let correctCount = 0;
+let runRecorded = false;
 let started = false;
 let countdownInterval = null;
 let timeRemaining = COUNTDOWN_SECONDS;
@@ -49,7 +61,7 @@ startBtn.addEventListener('click', () => {
 });
 
 function loadScenario(index) {
-  const scenario = scenarios[index];
+  const scenario = levelScenarios[index];
 
   feedbackDisplay.textContent = '';
   feedbackDisplay.className = 'feedback';
@@ -58,7 +70,7 @@ function loadScenario(index) {
   decisionPanel.classList.add('hidden');
   skipBtn.classList.remove('hidden');
 
-  scenarioCounter.textContent = `Scenario ${index + 1} of ${scenarios.length}: ${scenario.title}`;
+  scenarioCounter.textContent = `Scenario ${index + 1} of ${levelScenarios.length}: ${scenario.title}`;
   promptDisplay.textContent = scenario.prompt;
   videoCredit.textContent = `Video: ${scenario.credit}`;
 
@@ -102,7 +114,7 @@ function handleDecision(chosenButton) {
   decisionPanel.classList.add('hidden');
   skipBtn.classList.add('hidden');
 
-  const scenario = scenarios[currentIndex];
+  const scenario = levelScenarios[currentIndex];
   let wasCorrect = false;
 
   if (!chosenButton) {
@@ -111,6 +123,7 @@ function handleDecision(chosenButton) {
     playSound('timeout');
   } else {
     wasCorrect = chosenButton.dataset.correct === 'true';
+    if (wasCorrect) correctCount++;
     feedbackDisplay.textContent = (wasCorrect ? 'Correct! ' : 'Not quite. ') + chosenButton.dataset.explain;
     feedbackDisplay.className = wasCorrect ? 'feedback correct' : 'feedback incorrect';
     playSound(wasCorrect ? 'correct' : 'incorrect');
@@ -123,12 +136,17 @@ function handleDecision(chosenButton) {
 }
 
 function showNextOrFinish() {
-  if (currentIndex < scenarios.length - 1) {
+  if (currentIndex < levelScenarios.length - 1) {
     nextBtn.classList.remove('hidden');
   } else {
-    completeText.textContent = `You've been through all ${scenarios.length} scenarios.`;
+    let message = `You got ${correctCount} out of ${levelScenarios.length} correct on ${LEVELS[level].name}.`;
+    if (!runRecorded) {
+      runRecorded = true;
+      message += levelResultMessage(correctCount, levelScenarios.length);
+    }
+    completeText.textContent = message;
     creditsList.innerHTML = '';
-    getUniqueCredits().forEach(credit => {
+    getUniqueCredits(levelScenarios).forEach(credit => {
       const li = document.createElement('li');
       li.textContent = credit;
       creditsList.appendChild(li);
@@ -162,7 +180,7 @@ skipBtn.addEventListener('click', () => {
   stopClip();
   decisionPanel.classList.add('hidden');
   skipBtn.classList.add('hidden');
-  if (currentIndex < scenarios.length - 1) {
+  if (currentIndex < levelScenarios.length - 1) {
     currentIndex++;
     loadScenario(currentIndex);
   } else {
@@ -170,3 +188,14 @@ skipBtn.addEventListener('click', () => {
     showNextOrFinish();
   }
 });
+
+function levelResultMessage(correct, total) {
+  const run = recordLevelRun(level, correct, total);
+  if (run.newlyUnlocked) {
+    return ` Level ${run.newlyUnlocked} (${LEVELS[run.newlyUnlocked].name}) unlocked!`;
+  }
+  if (!run.passed) {
+    return ` Get at least ${PASS_PERCENT}% to unlock the next level.`;
+  }
+  return '';
+}

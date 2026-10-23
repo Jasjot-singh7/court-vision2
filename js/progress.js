@@ -26,7 +26,7 @@ if (data.totalAttempted === 0) {
 
   show('accuracyDisplay', `${accuracy}%`);
   show('completedDisplay', data.totalAttempted);
-  show('levelDisplay', getCurrentLevel(data.totalAttempted));
+  show('levelDisplay', getCurrentLevel());
   show('bestDisplay', data.bestChallenge
     ? `${data.bestChallenge.correct}/${data.bestChallenge.total}`
     : '—');
@@ -44,6 +44,21 @@ if (data.totalAttempted === 0) {
       tr.appendChild(td);
     });
     modeBody.appendChild(tr);
+  });
+
+  // Per-level table
+  const levelBody = document.getElementById('levelBody');
+  Object.keys(LEVELS).forEach(n => {
+    const level = Number(n);
+    const best = data.levelBest[level];
+    const status = !isLevelUnlocked(level) ? 'Locked' : (levelPassed(level) ? 'Passed' : 'Open');
+    const tr = document.createElement('tr');
+    [`${level}. ${LEVELS[level].name}`, best ? `${best.correct}/${best.total}` : '—', status].forEach(text => {
+      const td = document.createElement('td');
+      td.textContent = text;
+      tr.appendChild(td);
+    });
+    levelBody.appendChild(tr);
   });
 
   // Per-scenario table, weakest first so users know what to practise

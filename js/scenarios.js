@@ -31,6 +31,7 @@ const SOURCES = {
 const scenarios = [
   {
     title: 'Setter Attack Choice',
+    level: 1,
     ...SOURCES.brazilJapan,
     start: t(0, 18), decisionAt: t(0, 24), end: t(0, 26),
     prompt: 'You are the setter. Who do you set?',
@@ -43,6 +44,7 @@ const scenarios = [
   },
   {
     title: 'Blocking Decision',
+    level: 2,
     ...SOURCES.brazilJapan,
     start: t(2, 11), decisionAt: t(2, 18), end: t(2, 21),
     prompt: 'Do you commit to the middle attacker or stay with the outside hitter?',
@@ -53,6 +55,7 @@ const scenarios = [
   },
   {
     title: 'Serve Receive Positioning',
+    level: 1,
     ...SOURCES.brazilJapan,
     start: t(2, 35), decisionAt: t(2, 39), end: t(2, 43),
     prompt: 'Where do you move before receiving the serve?',
@@ -64,6 +67,7 @@ const scenarios = [
   },
   {
     title: 'Defensive Coverage',
+    level: 2,
     ...SOURCES.brazilJapan,
     start: t(5, 11), decisionAt: t(5, 16), end: t(5, 24),
     prompt: 'Your team just attacked. Where do you position yourself?',
@@ -75,6 +79,7 @@ const scenarios = [
   },
   {
     title: 'Free Ball Communication',
+    level: 1,
     ...SOURCES.brazilJapan,
     start: t(8, 8), decisionAt: t(8, 14), end: t(8, 20),
     prompt: 'A free ball is coming over. What do you do?',
@@ -86,6 +91,7 @@ const scenarios = [
   },
   {
     title: 'Serving Strategy',
+    level: 1,
     ...SOURCES.serves,
     start: t(0, 0), decisionAt: t(0, 4), end: t(0, 9),
     prompt: 'Which player do you target with your serve?',
@@ -97,6 +103,7 @@ const scenarios = [
   },
   {
     title: 'Backcourt Defensive Decision',
+    level: 3,
     ...SOURCES.brazilJapan,
     start: t(21, 0), decisionAt: t(21, 7), end: t(21, 11),
     prompt: 'Based on the attacker\'s approach, where do you move?',
@@ -108,6 +115,7 @@ const scenarios = [
   },
   {
     title: 'Transition Attack',
+    level: 2,
     ...SOURCES.brazilJapan,
     start: t(20, 45), decisionAt: t(20, 50), end: t(20, 53),
     prompt: 'Your team just defended successfully. What\'s the best attack option?',
@@ -119,6 +127,7 @@ const scenarios = [
   },
   {
     title: 'Out of System Setting',
+    level: 3,
     ...SOURCES.brazilJapan,
     start: t(19, 48), decisionAt: t(19, 51), end: t(19, 54),
     prompt: 'The pass is off the net. Where do you set?',
@@ -131,6 +140,7 @@ const scenarios = [
   },
   {
     title: 'Emergency Save Situation',
+    level: 3,
     ...SOURCES.brazilJapan,
     start: t(19, 49), decisionAt: t(19, 54), end: t(19, 59),
     prompt: 'The ball is dropping fast and you are off balance. What do you do?',
@@ -143,6 +153,31 @@ const scenarios = [
 ];
 
 // The distinct video credits, for the end-of-mode credits list
-function getUniqueCredits() {
-  return [...new Set(scenarios.map(s => s.credit))];
+function getUniqueCredits(list = scenarios) {
+  return [...new Set(list.map(s => s.credit))];
+}
+
+/* ---------- Levels (MAP) ----------
+   Each level has a name, a decision time (harder levels give less time) and
+   its own set of scenarios. A level unlocks once the previous level has been
+   completed with at least PASS_PERCENT correct (in Training or Challenge).
+   NOTE: which scenario sits in which level is a judgement call. Check it with
+   your coach and move scenarios between levels by changing their `level`. */
+
+const LEVELS = {
+  1: { name: 'Beginner',     seconds: 10, blurb: 'Clear situations with plenty of time to decide.' },
+  2: { name: 'Intermediate', seconds: 8,  blurb: 'Faster plays that need a quicker read.' },
+  3: { name: 'Advanced',     seconds: 6,  blurb: 'Broken plays and split-second calls.' },
+};
+
+const PASS_PERCENT = 60;
+
+function getScenariosForLevel(level) {
+  return scenarios.filter(s => s.level === level);
+}
+
+// Reads ?level=2 from the page address. Returns null if missing or invalid.
+function getRequestedLevel() {
+  const value = parseInt(new URLSearchParams(location.search).get('level'), 10);
+  return LEVELS[value] ? value : null;
 }
