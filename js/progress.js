@@ -2,6 +2,11 @@
 
 const data = getProgressData();
 
+const accountUser = getCurrentUser();
+document.getElementById('accountNote').textContent = accountUser
+  ? `Saved to ${accountUser}'s account on this device.`
+  : 'You are a guest, so progress clears when you close the tab. Log in to save it.';
+
 const emptyState = document.getElementById('emptyState');
 const statsWrapper = document.getElementById('statsWrapper');
 

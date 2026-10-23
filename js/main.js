@@ -79,6 +79,7 @@ function loadScenario(index) {
 function showDecisionPoint() {
   playSound('decision');
   decisionPanel.classList.remove('hidden');
+  startTimerBar(COUNTDOWN_SECONDS);
   timeRemaining = COUNTDOWN_SECONDS;
   timerDisplay.textContent = timeRemaining;
   timerDisplay.classList.remove('urgent');
@@ -97,6 +98,7 @@ function showDecisionPoint() {
 
 function handleDecision(chosenButton) {
   clearInterval(countdownInterval);
+  stopTimerBar();
   decisionPanel.classList.add('hidden');
   skipBtn.classList.add('hidden');
 
@@ -156,6 +158,7 @@ nextBtn.addEventListener('click', () => {
 
 skipBtn.addEventListener('click', () => {
   clearInterval(countdownInterval);
+  stopTimerBar();
   stopClip();
   decisionPanel.classList.add('hidden');
   skipBtn.classList.add('hidden');

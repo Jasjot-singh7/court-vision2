@@ -388,3 +388,92 @@ p.subtitle {
   h1.page-title { font-size: 1.7rem; }
   header.site-header { flex-direction: column; align-items: flex-start; }
 }
+
+/* ---------- Timer bar (Core Mechanics) ---------- */
+
+.timer-bar {
+  background: var(--card);
+  border-radius: 999px;
+  height: 14px;
+  overflow: hidden;
+  max-width: 500px;
+  margin: 0.5rem auto 1rem;
+}
+
+.timer-fill {
+  background: var(--accent);
+  height: 100%;
+  width: 100%;
+}
+
+.timer-fill.urgent {
+  background: var(--bad);
+}
+
+/* ---------- Login / account ---------- */
+
+.account-name {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.auth-box {
+  max-width: 400px;
+  margin: 0 auto;
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem 1.5rem;
+  text-align: left;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.auth-tab {
+  flex: 1;
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--muted);
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.auth-box label {
+  display: block;
+  font-weight: 600;
+  margin-top: 0.8rem;
+}
+
+.auth-box input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.25rem;
+  border: 2px solid var(--muted);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+.auth-box .btn {
+  width: 100%;
+  text-align: center;
+}
+
+.auth-note {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 1rem;
+}

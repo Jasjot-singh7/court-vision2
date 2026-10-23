@@ -73,6 +73,7 @@ function loadScenario(index) {
 function showDecisionPoint() {
   playSound('decision');
   decisionPanel.classList.remove('hidden');
+  startTimerBar(COUNTDOWN_SECONDS);
   timeRemaining = COUNTDOWN_SECONDS;
   timerDisplay.textContent = timeRemaining;
   timerDisplay.classList.remove('urgent');
@@ -91,6 +92,7 @@ function showDecisionPoint() {
 
 function handleDecision(chosenButton) {
   clearInterval(countdownInterval);
+  stopTimerBar();
 
   const scenario = scenarios[currentIndex];
   const wasCorrect = !!(chosenButton && chosenButton.dataset.correct === 'true');
@@ -148,6 +150,7 @@ function showPlayerProblem(message) {
 
 skipBtn.addEventListener('click', () => {
   clearInterval(countdownInterval);
+  stopTimerBar();
   stopClip();
   goToNextScenario();
 });

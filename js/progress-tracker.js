@@ -1,7 +1,7 @@
 /* Court Vision — Score/Data (Sprint 2)
-   Uses sessionStorage so progress persists across pages WITHIN one browser
-   session, but resets when the tab/browser closes. Persistent storage across
-   visits is a later-sprint (MAP) goal.
+   Guests: sessionStorage (resets when the tab closes).
+   Logged-in users (auth.js): localStorage, saved between visits on the same
+   browser. Cloud saving across devices is a later-sprint (MAP) goal.
    Tracks: overall totals, per-mode totals, per-scenario results, best
    Challenge score, and the five most recent activities.
 */
@@ -22,10 +22,19 @@ function emptyProgress() {
   };
 }
 
+// Logged-in users save to localStorage (kept between visits); guests use
+// sessionStorage (cleared when the tab closes).
+function progressStore() {
+  const userKey = (typeof getCurrentUserKey === 'function') ? getCurrentUserKey() : null;
+  if (userKey) return { store: localStorage, key: PROGRESS_KEY + ':' + userKey };
+  return { store: sessionStorage, key: PROGRESS_KEY };
+}
+
 function getProgressData() {
   let data = emptyProgress();
   try {
-    const raw = sessionStorage.getItem(PROGRESS_KEY);
+    const s = progressStore();
+    const raw = s.store.getItem(s.key);
     if (raw) data = Object.assign(emptyProgress(), JSON.parse(raw));
   } catch (e) { /* storage blocked or corrupt: start fresh */ }
   return data;
@@ -33,7 +42,8 @@ function getProgressData() {
 
 function saveProgressData(data) {
   try {
-    sessionStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
+    const s = progressStore();
+    s.store.setItem(s.key, JSON.stringify(data));
   } catch (e) { /* storage blocked: progress just won't be kept */ }
 }
 
@@ -69,7 +79,7 @@ function recordChallengeScore(correct, total) {
 }
 
 function resetProgress() {
-  try { sessionStorage.removeItem(PROGRESS_KEY); } catch (e) {}
+  try { const s = progressStore(); s.store.removeItem(s.key); } catch (e) {}
 }
 
 function getCurrentLevel(totalAttempted) {
