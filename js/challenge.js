@@ -29,6 +29,9 @@ if (level) {
   levelBadge.textContent = `Level ${level}: ${LEVELS[level].name} · ${LEVELS[level].seconds} seconds per decision`;
   document.getElementById('howSeconds').textContent = LEVELS[level].seconds;
 }
+const replayBtn = document.getElementById('replayBtn');
+const REPLAYS_ALLOWED = 1; // Training: unlimited. Challenge: once per scenario.
+let replaysLeft = REPLAYS_ALLOWED;
 const COUNTDOWN_SECONDS = level ? LEVELS[level].seconds : 10;
 
 let currentIndex = 0;
@@ -80,7 +83,23 @@ function loadScenario(index) {
   playClip(scenario, showDecisionPoint);
 }
 
+function updateReplayButton() {
+  replayBtn.disabled = replaysLeft <= 0;
+  replayBtn.textContent = REPLAYS_ALLOWED === Infinity
+    ? 'Replay last 4 seconds'
+    : `Replay last 4 seconds (${replaysLeft} left)`;
+}
+
+replayBtn.addEventListener('click', () => {
+  if (replaysLeft <= 0) return;
+  replaysLeft--;
+  updateReplayButton();
+  replayClip(levelScenarios[currentIndex]);
+});
+
 function showDecisionPoint() {
+  replaysLeft = REPLAYS_ALLOWED;
+  updateReplayButton();
   playSound('decision');
   decisionPanel.classList.remove('hidden');
   startTimerBar(COUNTDOWN_SECONDS);
