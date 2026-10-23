@@ -1,9 +1,24 @@
-/* Court Vision — Main Stylesheet
-   Theme: Dark Navy (#0A2342) / Card Navy (#13315C) / Volleyball Orange (#F28C28) / Off White (#F8F9FA)
-   Typography Choice (Option A): Bebas Neue (Titles/Headers) + Roboto (Body/Buttons)
+/* Court Vision — styles (Sprint 2 / MMP)
+   Colour: dark theme chosen from Colour trial B, using the Design doc palette
+   Navy #0A2342 | Volleyball Orange #F28C28 | Off White #F8F9FA
+   Fonts: Montserrat (titles/headers) + Open Sans (body text)
+   To change the theme or fonts, edit the variables in :root only.
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap');
+:root {
+  --bg: #0A2342;          /* page background (navy) */
+  --bg-dark: #06162B;     /* header */
+  --card: #13315C;        /* cards and panels */
+  --text: #F8F9FA;        /* off white */
+  --muted: #B8C4D6;       /* credits, small print */
+  --accent: #F28C28;      /* volleyball orange */
+  --on-accent: #0A2342;   /* text on orange buttons */
+  --ok: #5FD38D;          /* correct */
+  --bad: #FF8A80;         /* incorrect */
+
+  --font-heading: 'Montserrat', Arial, Helvetica, sans-serif;
+  --font-body: 'Open Sans', Arial, Helvetica, sans-serif;
+}
 
 * {
   box-sizing: border-box;
@@ -12,10 +27,11 @@
 }
 
 body {
-  font-family: 'Roboto', Arial, Helvetica, sans-serif;
-  background: #0A2342;
-  color: #F8F9FA;
-  line-height: 1.5;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
 }
 
 a {
@@ -23,22 +39,15 @@ a {
   text-decoration: none;
 }
 
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .container {
   max-width: 900px;
   margin: 0 auto;
   padding: 1rem;
-}
-
-.btn {
-  display: inline-block;
-  background: #F28C28;
-  color: #0A2342;
-  font-family: 'Roboto', sans-serif;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
 }
 
 .page-content {
@@ -50,80 +59,118 @@ a {
   display: none;
 }
 
-/* ====================================================
-   Site header / navigation
-   ==================================================== */
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.7rem 1.4rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.btn:hover {
+  opacity: 0.88;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--muted);
+}
+
+/* ---------- Header / navigation (horizontal top bar) ---------- */
 
 header.site-header {
-  background: #06162B;
-  color: #F8F9FA;
+  background: var(--bg-dark);
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem;
   flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 header.site-header .site-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.8rem;
-  letter-spacing: 1px;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
 }
 
 header.site-header nav {
   display: flex;
+  align-items: center;
   gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 header.site-header nav a {
-  color: #F8F9FA;
+  color: var(--text);
   padding: 0.5rem 0.25rem;
   border-bottom: 3px solid transparent;
 }
 
-header.site-header nav a.active {
-  border-bottom: 3px solid #F28C28;
-  color: #F28C28;
-}
-
+header.site-header nav a.active,
 header.site-header nav a:hover {
-  border-bottom: 3px solid #F28C28;
-  color: #F28C28;
+  border-bottom: 3px solid var(--accent);
+  color: var(--accent);
 }
 
-/* ====================================================
-   Titles / Headers / Text — Bebas Neue + Roboto
-   ==================================================== */
-
-h1, h2, h3, h4, h5, h6, 
-.site-title, 
-.page-title, 
-.section-title {
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 1px;
-  font-weight: normal;
+.sound-toggle {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--muted);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.25rem 0.8rem;
+  cursor: pointer;
 }
+
+.sound-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---------- Titles / Headers / Text ---------- */
 
 h1.page-title {
-  font-size: 2.4rem;
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.2;
   margin-bottom: 0.5rem;
 }
 
 h2.section-title {
-  font-size: 1.6rem;
-  color: #F28C28;
-  margin: 1.5rem 0 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 1.75rem 0 0.6rem;
+  color: var(--accent);
 }
 
 p.subtitle {
-  font-size: 1rem;
-  color: #B8C4D6;
+  font-size: 1.1rem;
+  color: var(--muted);
   margin-bottom: 1.5rem;
 }
 
-/* ====================================================
-   Home page — mode cards
-   ==================================================== */
+/* ---------- Home page mode cards ---------- */
 
 .mode-cards {
   display: flex;
@@ -136,78 +183,33 @@ p.subtitle {
 .mode-card {
   display: block;
   width: 100%;
-  max-width: 320px;
-  background: #13315C;
-  color: #F8F9FA;
+  max-width: 340px;
+  background: var(--card);
+  color: var(--text);
   padding: 1.2rem;
   border-radius: 8px;
   text-align: center;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.5rem;
-  letter-spacing: 1px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
   border: 3px solid transparent;
 }
 
 .mode-card:hover {
-  border-color: #F28C28;
-  color: #F28C28;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .mode-card .mode-card-desc {
   display: block;
-  font-family: 'Roboto', sans-serif;
-  font-weight: normal;
+  font-family: var(--font-body);
+  font-weight: 400;
   font-size: 0.9rem;
   margin-top: 0.4rem;
-  color: #B8C4D6;
-  letter-spacing: normal;
+  color: var(--muted);
 }
 
-.mode-card:hover .mode-card-desc {
-  color: #F28C28;
-}
-
-/* ====================================================
-   Core Mechanics — decision panel, timer, feedback
-   ==================================================== */
-
-.decision-panel {
-  margin-top: 1rem;
-}
-
-.decision-btn {
-  background: #F28C28;
-  color: #0A2342;
-  border: none;
-  padding: 0.7rem 1.1rem;
-  margin: 0.3rem;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  font-family: 'Roboto', sans-serif;
-}
-
-.decision-btn:hover {
-  opacity: 0.85;
-}
-
-.feedback {
-  margin-top: 1rem;
-  font-weight: bold;
-  min-height: 1.5rem;
-}
-
-.feedback.correct {
-  color: #5FD38D;
-}
-
-.feedback.incorrect {
-  color: #FF8A80;
-}
-
-/* ====================================================
-   Video player, start panel and credits
-   ==================================================== */
+/* ---------- Video player, start panel, credits ---------- */
 
 .video-wrap {
   width: 100%;
@@ -219,8 +221,7 @@ p.subtitle {
   overflow: hidden;
 }
 
-.video-wrap iframe,
-.video-wrap video {
+.video-wrap iframe {
   width: 100%;
   height: 100%;
   border: 0;
@@ -228,7 +229,7 @@ p.subtitle {
 
 .video-credit {
   font-size: 0.8rem;
-  color: #B8C4D6;
+  color: var(--muted);
   margin-top: 0.4rem;
 }
 
@@ -236,32 +237,154 @@ p.subtitle {
   max-width: 520px;
   margin: 0 auto 1.5rem;
   text-align: left;
-  background: #13315C;
-  padding: 1.5rem;
+  background: var(--card);
+  padding: 1.2rem 1.5rem 1.5rem;
   border-radius: 8px;
 }
 
 .start-panel .section-title {
   text-align: center;
+  margin-top: 0.3rem;
 }
 
 .how-list {
-  margin: 0.5rem 0 1.2rem 1.4rem;
-  color: #B8C4D6;
+  margin: 0.5rem 0 1rem 1.4rem;
 }
 
 .start-panel .btn {
   display: block;
-  margin: 0 auto;
+  margin: 0.5rem auto 0;
 }
 
 .credits-list {
   list-style: none;
   font-size: 0.9rem;
-  color: #B8C4D6;
+  color: var(--muted);
 }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+/* ---------- Core Mechanics: decision panel, timer, feedback ---------- */
+
+.decision-panel {
+  margin-top: 1rem;
+}
+
+.timer {
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+.timer.urgent {
+  color: var(--bad);
+}
+
+.decision-btn {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  padding: 0.75rem 1.2rem;
+  margin: 0.3rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.decision-btn:hover {
+  opacity: 0.88;
+}
+
+.feedback {
+  margin-top: 1rem;
+  font-weight: 700;
+  min-height: 1.5rem;
+}
+
+.feedback.correct {
+  color: var(--ok);
+}
+
+.feedback.incorrect {
+  color: var(--bad);
+}
+
+/* ---------- Score / Data: progress page ---------- */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.stat-card {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.stat-value {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.bar {
+  background: var(--card);
+  border-radius: 999px;
+  height: 14px;
+  overflow: hidden;
+  max-width: 500px;
+  margin: 0.5rem auto 0;
+}
+
+.bar-fill {
+  background: var(--accent);
+  height: 100%;
+  width: 0;
+}
+
+.data-table {
+  width: 100%;
+  max-width: 640px;
+  margin: 0.5rem auto 0;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--card);
+}
+
+.data-table th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.activity-list {
+  list-style: none;
+  max-width: 640px;
+  margin: 0.5rem auto 0;
+  text-align: left;
+}
+
+.activity-list li {
+  background: var(--card);
+  border-radius: 6px;
+  padding: 0.5rem 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+@media (max-width: 600px) {
+  h1.page-title { font-size: 1.7rem; }
+  header.site-header { flex-direction: column; align-items: flex-start; }
 }

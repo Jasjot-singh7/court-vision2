@@ -41,6 +41,7 @@ loadYouTubeApi(
 );
 
 startBtn.addEventListener('click', () => {
+  playSound('start');
   started = true;
   startPanel.classList.add('hidden');
   scenarioCounter.classList.remove('hidden');
@@ -76,13 +77,17 @@ function loadScenario(index) {
 }
 
 function showDecisionPoint() {
+  playSound('decision');
   decisionPanel.classList.remove('hidden');
   timeRemaining = COUNTDOWN_SECONDS;
   timerDisplay.textContent = timeRemaining;
+  timerDisplay.classList.remove('urgent');
 
   countdownInterval = setInterval(() => {
     timeRemaining--;
     timerDisplay.textContent = timeRemaining;
+    timerDisplay.classList.toggle('urgent', timeRemaining <= 3);
+    if (timeRemaining > 0 && timeRemaining <= 3) playSound('tick');
     if (timeRemaining <= 0) {
       clearInterval(countdownInterval);
       handleDecision(null);
@@ -101,10 +106,12 @@ function handleDecision(chosenButton) {
   if (!chosenButton) {
     feedbackDisplay.textContent = "Time's up! Try to decide faster next time.";
     feedbackDisplay.className = 'feedback incorrect';
+    playSound('timeout');
   } else {
     wasCorrect = chosenButton.dataset.correct === 'true';
     feedbackDisplay.textContent = (wasCorrect ? 'Correct! ' : 'Not quite. ') + chosenButton.dataset.explain;
     feedbackDisplay.className = wasCorrect ? 'feedback correct' : 'feedback incorrect';
+    playSound(wasCorrect ? 'correct' : 'incorrect');
   }
 
   recordAttempt('Training', scenario.title, wasCorrect);
@@ -125,6 +132,7 @@ function showNextOrFinish() {
       creditsList.appendChild(li);
     });
     completePanel.classList.remove('hidden');
+    playSound('complete');
   }
 }
 

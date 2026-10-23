@@ -4,12 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Court Vision — Challenge Mode</title>
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
-
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -48,7 +45,7 @@
     <button id="skipBtn" class="btn hidden">Skip this scenario</button>
 
     <div id="decisionPanel" class="decision-panel hidden">
-      <p>Time remaining: <span id="timerDisplay">10</span>s</p>
+      <p>Time remaining: <span id="timerDisplay" class="timer">10</span>s</p>
       <p id="promptDisplay"></p>
       <div id="optionsContainer"></div>
     </div>
@@ -61,6 +58,7 @@
     </div>
   </main>
 
+  <script src="js/audio.js"></script>
   <script src="js/scenarios.js"></script>
   <script src="js/progress-tracker.js"></script>
   <script src="js/yt-player.js"></script>

@@ -39,6 +39,7 @@ loadYouTubeApi(
 );
 
 startBtn.addEventListener('click', () => {
+  playSound('start');
   started = true;
   startPanel.classList.add('hidden');
   scenarioCounter.classList.remove('hidden');
@@ -70,13 +71,17 @@ function loadScenario(index) {
 }
 
 function showDecisionPoint() {
+  playSound('decision');
   decisionPanel.classList.remove('hidden');
   timeRemaining = COUNTDOWN_SECONDS;
   timerDisplay.textContent = timeRemaining;
+  timerDisplay.classList.remove('urgent');
 
   countdownInterval = setInterval(() => {
     timeRemaining--;
     timerDisplay.textContent = timeRemaining;
+    timerDisplay.classList.toggle('urgent', timeRemaining <= 3);
+    if (timeRemaining > 0 && timeRemaining <= 3) playSound('tick');
     if (timeRemaining <= 0) {
       clearInterval(countdownInterval);
       handleDecision(null);
@@ -92,6 +97,8 @@ function handleDecision(chosenButton) {
   if (wasCorrect) correctCount++;
 
   recordAttempt('Challenge', scenario.title, wasCorrect);
+  // Neutral sound only: Challenge Mode must not reveal right or wrong
+  playSound(chosenButton ? 'select' : 'timeout');
 
   goToNextScenario();
 }
@@ -122,6 +129,8 @@ function showFinalResults() {
     creditsList.appendChild(li);
   });
   resultsPanel.classList.remove('hidden');
+  recordChallengeScore(correctCount, scenarios.length);
+  playSound('complete');
 }
 
 function showPlayerProblem(message) {

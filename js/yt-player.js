@@ -1,8 +1,4 @@
-/* Court Vision — YouTube player helper (shared by Training and Challenge Mode)
-   Replaces the local <video> element. Each scenario plays a short section of
-   a YouTube video (start -> end), pauses at decisionAt, and can then resume
-   to show the outcome. Uses the YouTube IFrame Player API.
-*/
+/* Court Vision — YouTube player helper (shared by Training and Challenge Mode) */
 
 let ytPlayer = null;
 let ytOnReady = null;
@@ -10,9 +6,8 @@ let ytOnError = null;
 let decisionWatcher = null;
 let decisionFallback = null;
 let pendingDecision = null;
-let clipArmed = false; // true once real playback of the current clip has been seen
+let clipArmed = false;
 
-// Fires the decision point once, whichever trigger gets there first
 function fireDecision() {
   if (!pendingDecision) return;
   const cb = pendingDecision;
@@ -32,13 +27,12 @@ function loadYouTubeApi(onReady, onError) {
   document.head.appendChild(tag);
 }
 
-// YouTube's script calls this function by name once it has loaded
 function onYouTubeIframeAPIReady() {
   ytPlayer = new YT.Player('player', {
     width: '100%',
     height: '100%',
     playerVars: {
-      controls: 0,        // no scrubbing past the decision point
+      controls: 0,
       disablekb: 1,
       fs: 0,
       rel: 0,
@@ -49,18 +43,13 @@ function onYouTubeIframeAPIReady() {
     events: {
       onReady: () => ytOnReady(),
       onStateChange: (e) => {
-        // Clip reached its end time before the decision point fired
         if (e.data === YT.PlayerState.ENDED && clipArmed) fireDecision();
       },
-      onError: () => ytOnError("This video can't be played here. It may have been removed, or its owner may have turned off embedding."),
+      onError: () => ytOnError("This video can't be played here."),
     },
   });
 }
 
-/**
- * Plays scenario.start -> scenario.end and calls onDecisionPoint()
- * (with the video paused) when playback reaches scenario.decisionAt.
- */
 function playClip(scenario, onDecisionPoint) {
   stopWatching();
   pendingDecision = onDecisionPoint;
@@ -72,18 +61,12 @@ function playClip(scenario, onDecisionPoint) {
   });
   ytPlayer.playVideo();
 
-  // The player can briefly report the PREVIOUS clip's time after loading a new
-  // video, so only start checking once we've seen real playback inside this
-  // clip, before the decision point.
-  let armed = false; // local mirror of clipArmed
-
+  let armed = false;
   const loadedAt = Date.now();
   let lastKick = loadedAt;
 
   decisionWatcher = setInterval(() => {
     const state = ytPlayer.getPlayerState();
-
-    // If the new clip loaded but didn't start by itself, nudge it to play
     const stalled = state === YT.PlayerState.PAUSED ||
                     state === YT.PlayerState.CUED ||
                     state === YT.PlayerState.UNSTARTED;
@@ -106,8 +89,6 @@ function playClip(scenario, onDecisionPoint) {
     if (now >= scenario.decisionAt) fireDecision();
   }, 100);
 
-  // Safety net: if playback never reports a usable time (ads, buffering,
-  // stale time), still show the question so the user is never stuck.
   decisionFallback = setTimeout(fireDecision, (scenario.end - scenario.start + 12) * 1000);
 }
 
