@@ -1,7 +1,5 @@
-/* Court Vision — Score/Data (MVP)
-   Uses sessionStorage so progress persists across pages WITHIN one
-   browser session, but resets when the tab/browser closes. Persistent
-   storage is a later-sprint (MAP) goal, not MVP.
+/* Court Vision — Score and Data Tracking (MVP)
+   Uses sessionStorage so progress persists across pages within one session[cite: 25].
 */
 
 const PROGRESS_KEY = 'courtVisionProgress';
